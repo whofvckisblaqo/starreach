@@ -1,6 +1,7 @@
 import { Geist } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/components/ui/SessionProvider";
+import TawkTo from "@/components/ui/TawkTo";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -14,7 +15,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={geist.className}>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>
+          {children}
+          <TawkTo />
+        </NextAuthProvider>
       </body>
     </html>
   );
