@@ -4,6 +4,11 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db";
 import Booking from "@/lib/models/Booking";
 import Celebrity from "@/lib/models/Celebrity";
+import User from "@/lib/models/User";
+import {
+  sendBookingConfirmationEmail,
+  sendAdminBookingNotificationEmail,
+} from "@/lib/emails";
 
 export async function POST(req) {
   try {
@@ -24,7 +29,6 @@ export async function POST(req) {
       );
     }
 
-    // Verify celebrity exists
     const celebrity = await Celebrity.findById(celebrityId);
     if (!celebrity) {
       return NextResponse.json(
@@ -33,7 +37,6 @@ export async function POST(req) {
       );
     }
 
-    // Verify booking type is available
     const bookingTypeData = celebrity.bookingTypes?.[bookingType];
     if (!bookingTypeData?.available) {
       return NextResponse.json(
@@ -52,6 +55,36 @@ export async function POST(req) {
       status: "pending",
       paymentStatus: "unpaid",
     });
+
+    // Fetch user details for email
+    const user = await User.findById(session.user.id);
+
+    // Send emails in background (don't await to keep response fast)
+    try {
+      await Promise.all([
+        sendBookingConfirmationEmail({
+          userName: user.name,
+          userEmail: user.email,
+          celebrityName: celebrity.name,
+          bookingType,
+          amount,
+          scheduledDate,
+          notes,
+        }),
+        sendAdminBookingNotificationEmail({
+          userName: user.name,
+          userEmail: user.email,
+          celebrityName: celebrity.name,
+          bookingType,
+          amount,
+          scheduledDate,
+          notes,
+        }),
+      ]);
+    } catch (emailError) {
+      console.error("Email sending failed:", emailError);
+      // Don't fail the booking if email fails
+    }
 
     return NextResponse.json({ booking }, { status: 201 });
   } catch (error) {
