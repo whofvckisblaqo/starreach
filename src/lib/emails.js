@@ -1,7 +1,7 @@
-const FROM_EMAIL = "StarReach <onboarding@resend.dev>";
-const ADMIN_EMAIL = "your-personal-email@gmail.com";
 import resend from "@/lib/resend";
 
+const FROM_EMAIL = "StarReach <onboarding@resend.dev>";
+const ADMIN_EMAIL = "starreach02@gmail.com";
 
 // ── Email to user after booking ──
 export async function sendBookingConfirmationEmail({
@@ -26,7 +26,7 @@ export async function sendBookingConfirmationEmail({
 
   await resend.emails.send({
     from: FROM_EMAIL,
-    to: userEmail,
+    to: ADMIN_EMAIL,
     subject: `Booking Received — ${celebrityName} | StarReach`,
     html: `
       <!DOCTYPE html>
@@ -65,6 +65,10 @@ export async function sendBookingConfirmationEmail({
                   <tr>
                     <td style="color:#6b7280;font-size:13px;padding:6px 0;">Booking Type</td>
                     <td style="color:#111827;font-size:13px;font-weight:600;text-align:right;">${bookingTypeLabel}</td>
+                  </tr>
+                  <tr>
+                    <td style="color:#6b7280;font-size:13px;padding:6px 0;">User Email</td>
+                    <td style="color:#111827;font-size:13px;font-weight:600;text-align:right;">${userEmail}</td>
                   </tr>
                   ${scheduledDate ? `
                   <tr>
@@ -112,7 +116,7 @@ export async function sendBookingConfirmationEmail({
                 <div style="display:flex;flex-direction:column;gap:8px;">
                   ${["Complete payment using the details above", "Our team verifies your payment within 24 hours", "You receive a booking confirmation email", "Enjoy your celebrity experience! 🌟"].map((step, i) => `
                     <div style="display:flex;align-items:flex-start;gap:12px;padding:8px 0;">
-                      <div style="width:24px;height:24px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                      <div style="width:24px;height:24px;background:#000;border-radius:50%;display:inline-block;text-align:center;line-height:24px;">
                         <span style="color:#fff;font-size:11px;font-weight:700;">${i + 1}</span>
                       </div>
                       <p style="color:#6b7280;font-size:13px;margin:0;line-height:1.5;">${step}</p>
@@ -237,7 +241,7 @@ export async function sendAdminBookingNotificationEmail({
   });
 }
 
-// ── Email to user when booking is confirmed ──
+// ── Email to user when booking status changes ──
 export async function sendBookingStatusEmail({
   userName,
   userEmail,
@@ -281,7 +285,7 @@ export async function sendBookingStatusEmail({
 
   await resend.emails.send({
     from: FROM_EMAIL,
-    to: userEmail,
+    to: ADMIN_EMAIL,
     subject: `${config.emoji} Booking ${status.charAt(0).toUpperCase() + status.slice(1)} — ${celebrityName} | StarReach`,
     html: `
       <!DOCTYPE html>
@@ -295,10 +299,8 @@ export async function sendBookingStatusEmail({
             </div>
 
             <div style="padding:32px;text-align:center;">
-              <div style="width:64px;height:64px;border-radius:50%;background:#f9fafb;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;">
-                <span style="font-size:32px;">${config.emoji}</span>
-              </div>
-              <h2 style="color:#111827;font-size:22px;margin:0 0 8px;">${config.title}</h2>
+              <span style="font-size:48px;">${config.emoji}</span>
+              <h2 style="color:#111827;font-size:22px;margin:16px 0 8px;">${config.title}</h2>
               <p style="color:#6b7280;font-size:14px;margin:0 0 24px;line-height:1.6;">
                 Hi ${userName}, ${config.message}
               </p>
