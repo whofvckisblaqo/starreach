@@ -2,6 +2,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 const bookingTypes = [
   { key: "vipMembership", label: "VIP Membership Card", icon: "👑" },
@@ -186,7 +187,8 @@ export default function EditCelebrityForm({ params }) {
             Edit Celebrity
           </h1>
           <p className="text-gray-500 mt-1 text-sm">
-            Updating: <span className="font-medium text-black">{form.name}</span>
+            Updating:{" "}
+            <span className="font-medium text-black">{form.name}</span>
           </p>
         </div>
         <Link
@@ -300,50 +302,22 @@ export default function EditCelebrityForm({ params }) {
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
           <h2 className="text-lg font-bold text-black mb-6">Images</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                Photo URL *
-              </label>
-              <input
-                type="url"
-                name="photo"
-                value={form.photo}
-                onChange={handleChange}
-                placeholder="https://example.com/photo.jpg"
-                required
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
-              />
-              {form.photo && (
-                <img
-                  src={form.photo}
-                  alt="Preview"
-                  className="mt-2 h-20 w-20 object-cover rounded-xl border border-gray-200"
-                  onError={(e) => (e.target.style.display = "none")}
-                />
-              )}
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                Cover Image URL
-              </label>
-              <input
-                type="url"
-                name="coverImage"
-                value={form.coverImage}
-                onChange={handleChange}
-                placeholder="https://example.com/cover.jpg"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
-              />
-              {form.coverImage && (
-                <img
-                  src={form.coverImage}
-                  alt="Cover Preview"
-                  className="mt-2 h-20 w-full object-cover rounded-xl border border-gray-200"
-                  onError={(e) => (e.target.style.display = "none")}
-                />
-              )}
-            </div>
+            <ImageUpload
+              label="Celebrity Photo *"
+              value={form.photo}
+              onChange={(url) =>
+                setForm((prev) => ({ ...prev, photo: url }))
+              }
+              hint="Main photo shown on celebrity card and profile"
+            />
+            <ImageUpload
+              label="Cover Image"
+              value={form.coverImage}
+              onChange={(url) =>
+                setForm((prev) => ({ ...prev, coverImage: url }))
+              }
+              hint="Banner image shown at top of celebrity profile"
+            />
           </div>
         </div>
 
@@ -370,7 +344,7 @@ export default function EditCelebrityForm({ params }) {
                   <div className="flex items-center gap-3 flex-1">
                     <input
                       type="checkbox"
-                      id={type.key}
+                      id={`edit-${type.key}`}
                       checked={form.bookingTypes[type.key].available}
                       onChange={(e) =>
                         handleBookingTypeChange(
@@ -382,7 +356,7 @@ export default function EditCelebrityForm({ params }) {
                       className="w-4 h-4 cursor-pointer"
                     />
                     <label
-                      htmlFor={type.key}
+                      htmlFor={`edit-${type.key}`}
                       className="text-sm font-medium text-black cursor-pointer"
                     >
                       {type.icon} {type.label}

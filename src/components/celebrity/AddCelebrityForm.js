@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 const bookingTypes = [
   { key: "vipMembership", label: "VIP Membership Card", icon: "👑" },
@@ -58,7 +60,10 @@ export default function AddCelebrityForm() {
 
   const handleNameChange = (e) => {
     const name = e.target.value;
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const slug = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
     setForm((prev) => ({ ...prev, name, slug }));
   };
 
@@ -107,9 +112,21 @@ export default function AddCelebrityForm() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-black">Add Celebrity</h1>
-        <p className="text-gray-500 mt-1">Fill in the details to add a new celebrity to StarReach.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-black">
+            Add Celebrity
+          </h1>
+          <p className="text-gray-500 mt-1 text-sm">
+            Fill in the details to add a new celebrity to StarReach.
+          </p>
+        </div>
+        <Link
+          href="/admin/celebrities"
+          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition"
+        >
+          ← Back to Celebrities
+        </Link>
       </div>
 
       {error && (
@@ -125,12 +142,17 @@ export default function AddCelebrityForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
+
         {/* Basic Info */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="text-lg font-bold text-black mb-6">Basic Information</h2>
+          <h2 className="text-lg font-bold text-black mb-6">
+            Basic Information
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">Full Name *</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                Full Name *
+              </label>
               <input
                 type="text"
                 name="name"
@@ -143,7 +165,9 @@ export default function AddCelebrityForm() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">Slug (auto-generated)</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                Slug (auto-generated)
+              </label>
               <input
                 type="text"
                 name="slug"
@@ -156,7 +180,9 @@ export default function AddCelebrityForm() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">Category *</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                Category *
+              </label>
               <select
                 name="category"
                 value={form.category}
@@ -166,13 +192,17 @@ export default function AddCelebrityForm() {
               >
                 <option value="">Select category</option>
                 {categories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">Nationality</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                Nationality
+              </label>
               <input
                 type="text"
                 name="nationality"
@@ -184,7 +214,9 @@ export default function AddCelebrityForm() {
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-gray-700 block mb-1">Bio</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                Bio
+              </label>
               <textarea
                 name="bio"
                 value={form.bio}
@@ -201,39 +233,31 @@ export default function AddCelebrityForm() {
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
           <h2 className="text-lg font-bold text-black mb-6">Images</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">Photo URL *</label>
-              <input
-                type="url"
-                name="photo"
-                value={form.photo}
-                onChange={handleChange}
-                placeholder="https://example.com/photo.jpg"
-                required
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
-              />
-              <p className="text-xs text-gray-400 mt-1">Direct link to celebrity photo</p>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">Cover Image URL</label>
-              <input
-                type="url"
-                name="coverImage"
-                value={form.coverImage}
-                onChange={handleChange}
-                placeholder="https://example.com/cover.jpg"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
-              />
-              <p className="text-xs text-gray-400 mt-1">Banner image for the profile page</p>
-            </div>
+            <ImageUpload
+              label="Celebrity Photo *"
+              value={form.photo}
+              onChange={(url) => setForm((prev) => ({ ...prev, photo: url }))}
+              hint="Main photo shown on celebrity card and profile"
+            />
+            <ImageUpload
+              label="Cover Image"
+              value={form.coverImage}
+              onChange={(url) =>
+                setForm((prev) => ({ ...prev, coverImage: url }))
+              }
+              hint="Banner image shown at top of celebrity profile"
+            />
           </div>
         </div>
 
         {/* Booking Types */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="text-lg font-bold text-black mb-2">Booking Types & Pricing</h2>
-          <p className="text-gray-400 text-sm mb-6">Enable booking types and set prices for this celebrity.</p>
+          <h2 className="text-lg font-bold text-black mb-2">
+            Booking Types & Pricing
+          </h2>
+          <p className="text-gray-400 text-sm mb-6">
+            Enable booking types and set prices for this celebrity.
+          </p>
 
           <div className="space-y-4">
             {bookingTypes.map((type) => (
@@ -252,11 +276,18 @@ export default function AddCelebrityForm() {
                       id={type.key}
                       checked={form.bookingTypes[type.key].available}
                       onChange={(e) =>
-                        handleBookingTypeChange(type.key, "available", e.target.checked)
+                        handleBookingTypeChange(
+                          type.key,
+                          "available",
+                          e.target.checked
+                        )
                       }
                       className="w-4 h-4 cursor-pointer"
                     />
-                    <label htmlFor={type.key} className="text-sm font-medium text-black cursor-pointer">
+                    <label
+                      htmlFor={type.key}
+                      className="text-sm font-medium text-black cursor-pointer"
+                    >
                       {type.icon} {type.label}
                     </label>
                   </div>
@@ -268,7 +299,11 @@ export default function AddCelebrityForm() {
                         type="number"
                         value={form.bookingTypes[type.key].price}
                         onChange={(e) =>
-                          handleBookingTypeChange(type.key, "price", e.target.value)
+                          handleBookingTypeChange(
+                            type.key,
+                            "price",
+                            e.target.value
+                          )
                         }
                         placeholder="Price in USD"
                         min="0"
@@ -296,8 +331,12 @@ export default function AddCelebrityForm() {
                 className="w-4 h-4"
               />
               <div>
-                <p className="text-sm font-medium text-black">Featured Celebrity</p>
-                <p className="text-xs text-gray-400">Show on homepage featured section</p>
+                <p className="text-sm font-medium text-black">
+                  Featured Celebrity
+                </p>
+                <p className="text-xs text-gray-400">
+                  Show on homepage featured section
+                </p>
               </div>
             </label>
 
@@ -310,8 +349,12 @@ export default function AddCelebrityForm() {
                 className="w-4 h-4"
               />
               <div>
-                <p className="text-sm font-medium text-black">Available for Booking</p>
-                <p className="text-xs text-gray-400">Make this celebrity bookable</p>
+                <p className="text-sm font-medium text-black">
+                  Available for Booking
+                </p>
+                <p className="text-xs text-gray-400">
+                  Make this celebrity bookable
+                </p>
               </div>
             </label>
           </div>
@@ -326,13 +369,12 @@ export default function AddCelebrityForm() {
           >
             {loading ? "Adding Celebrity..." : "Add Celebrity"}
           </button>
-          <button
-            type="button"
-            onClick={() => router.push("/admin/celebrities")}
-            className="w-full sm:w-auto border border-black text-black px-10 py-4 rounded-full text-sm font-semibold hover:bg-black hover:text-white transition"
+          <Link
+            href="/admin/celebrities"
+            className="w-full sm:w-auto border border-black text-black px-10 py-4 rounded-full text-sm font-semibold hover:bg-black hover:text-white transition text-center"
           >
             Cancel
-          </button>
+          </Link>
         </div>
       </form>
     </div>
