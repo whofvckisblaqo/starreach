@@ -1,7 +1,7 @@
 import { Geist } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/components/ui/SessionProvider";
-import Smartsupp from "@/components/ui/smartsupp";
+import Smartsupp from "@/components/ui/Smartsupp";
 
 const geist = Geist({ subsets: ["latin"] });
 
