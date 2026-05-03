@@ -10,7 +10,7 @@ import Footer from "@/components/ui/Footer";
 
 export default function Home() {
   return (
-    <main>
+    <main className="overflow-x-hidden">
       <Navbar />
       <Hero />
       <BookingTypes />
