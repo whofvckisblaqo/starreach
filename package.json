@@ -10,6 +10,7 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.5.1",
     "@stripe/stripe-js": "^9.2.0",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.9.0",

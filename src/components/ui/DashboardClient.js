@@ -161,18 +161,27 @@ export default function DashboardClient({ session }) {
                       </p>
                     </div>
 
-                    {/* Amount */}
-                    <div className="text-left sm:text-right">
+                    {/* Amount + Status + Certificate */}
+                    <div className="flex flex-col sm:items-end gap-2">
                       <p className="font-bold text-black text-sm sm:text-base">
                         ${booking.amount?.toLocaleString()}
                       </p>
                       <span
-                        className={`inline-block text-xs px-3 py-1 rounded-full mt-1 font-medium capitalize ${
+                        className={`inline-block text-xs px-3 py-1 rounded-full font-medium capitalize ${
                           statusColors[booking.status]
                         }`}
                       >
                         {booking.status}
                       </span>
+
+                      <a
+                        href={`/api/bookings/${booking._id}/certificate`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs border border-black text-black px-3 py-1.5 rounded-full hover:bg-black hover:text-white transition"
+                      >
+                        📄 Certificate
+                      </a>
                     </div>
                   </div>
                 ))}
