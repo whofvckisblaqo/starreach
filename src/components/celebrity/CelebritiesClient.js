@@ -33,10 +33,17 @@ export default function CelebritiesClient() {
       if (search) params.set("search", search);
 
       const res = await fetch(`/api/celebrities?${params.toString()}`);
+
+      if (!res.ok) {
+        console.error("API error:", res.status);
+        setLoading(false);
+        return;
+      }
+
       const data = await res.json();
       setCelebrities(data.celebrities || []);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error fetching celebrities:", error);
     } finally {
       setLoading(false);
     }
@@ -157,6 +164,7 @@ export default function CelebritiesClient() {
                         src={celeb.photo || PLACEHOLDER}
                         alt={celeb.name}
                         fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       />
                       {celeb.featured && (
