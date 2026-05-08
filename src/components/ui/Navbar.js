@@ -15,6 +15,9 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
+          <Link href="/" className="text-sm text-gray-600 hover:text-black transition">
+            Home
+          </Link>
           <Link href="/celebrities" className="text-sm text-gray-600 hover:text-black transition">
             Celebrities
           </Link>
@@ -47,7 +50,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-black"
+          className="md:hidden text-black text-xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? "✕" : "☰"}
@@ -57,12 +60,55 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
-          <Link href="/celebrities" className="text-sm text-gray-600">Celebrities</Link>
-          <Link href="/booking-types" className="text-sm text-gray-600">Booking Types</Link>
-          <Link href="/about" className="text-sm text-gray-600">About</Link>
-          <Link href="/contact" className="text-sm text-gray-600">Contact</Link>
-          <Link href="/login" className="text-sm text-black border border-black px-5 py-2 rounded-full text-center">Log In</Link>
-          <Link href="/signup" className="text-sm bg-black text-white px-5 py-2 rounded-full text-center">Sign Up</Link>
+          <Link
+            href="/"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm text-gray-600 hover:text-black transition"
+          >
+            Home
+          </Link>
+          <Link
+            href="/celebrities"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm text-gray-600 hover:text-black transition"
+          >
+            Celebrities
+          </Link>
+          <Link
+            href="/booking-types"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm text-gray-600 hover:text-black transition"
+          >
+            Booking Types
+          </Link>
+          <Link
+            href="/about"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm text-gray-600 hover:text-black transition"
+          >
+            About
+          </Link>
+          <Link
+            href="/contact"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm text-gray-600 hover:text-black transition"
+          >
+            Contact
+          </Link>
+          <Link
+            href="/login"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm text-black border border-black px-5 py-2 rounded-full text-center hover:bg-black hover:text-white transition"
+          >
+            Log In
+          </Link>
+          <Link
+            href="/signup"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm bg-black text-white px-5 py-2 rounded-full text-center hover:bg-gray-800 transition"
+          >
+            Sign Up
+          </Link>
         </div>
       )}
     </nav>
