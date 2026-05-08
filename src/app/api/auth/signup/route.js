@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import connectDB from "@/lib/db";
 import User from "@/lib/models/User";
+import resend from "@/lib/resend";
+
+function generateCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 export async function POST(req) {
   try {
@@ -10,12 +15,11 @@ export async function POST(req) {
     const body = await req.json();
     console.log("SIGNUP BODY RECEIVED:", body);
 
-    const { name, email, password } = body;
+    const { name, email, password, phone, country } = body;
 
     if (!name || !email || !password) {
-      console.log("MISSING FIELDS:", { name, email, password });
       return NextResponse.json(
-        { error: "All fields are required" },
+        { error: "Name, email and password are required" },
         { status: 400 }
       );
     }
@@ -36,15 +40,68 @@ export async function POST(req) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
+    const verificationCode = generateCode();
+    const verificationExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
+      phone: phone || "",
+      country: country || "",
+      isVerified: false,
+      verificationCode,
+      verificationExpiry,
     });
 
+    // Send verification email
+    try {
+      await resend.emails.send({
+        from: "StarReach <onboarding@resend.dev>",
+        to: "starreach02@gmail.com",
+        subject: "Verify Your StarReach Account",
+        html: `
+          <!DOCTYPE html>
+          <html>
+            <body style="margin:0;padding:0;background:#f9fafb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+              <div style="max-width:600px;margin:40px auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb;">
+                <div style="background:#000000;padding:32px;text-align:center;">
+                  <h1 style="color:#ffffff;margin:0;font-size:24px;font-weight:700;">StarReach ⭐</h1>
+                  <p style="color:#9ca3af;margin:8px 0 0;font-size:14px;">Where Fans Meet Fame</p>
+                </div>
+                <div style="padding:32px;text-align:center;">
+                  <h2 style="color:#111827;font-size:20px;margin:0 0 8px;">Verify Your Email</h2>
+                  <p style="color:#6b7280;font-size:14px;margin:0 0 24px;">
+                    Hi ${name}! Use the code below to verify your StarReach account.
+                    This code expires in <strong>10 minutes</strong>.
+                  </p>
+                  <div style="background:#f9fafb;border-radius:12px;padding:24px;margin-bottom:24px;">
+                    <p style="color:#111827;font-size:48px;font-weight:700;letter-spacing:12px;margin:0;">
+                      ${verificationCode}
+                    </p>
+                  </div>
+                  <p style="color:#9ca3af;font-size:12px;">
+                    If you didn't create a StarReach account, you can safely ignore this email.
+                  </p>
+                </div>
+                <div style="background:#f9fafb;padding:24px;text-align:center;border-top:1px solid #e5e7eb;">
+                  <p style="color:#9ca3af;font-size:12px;margin:0;">StarReach — Where Fans Meet Fame</p>
+                </div>
+              </div>
+            </body>
+          </html>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Verification email failed:", emailError);
+    }
+
     return NextResponse.json(
-      { message: "Account created successfully", userId: user._id },
+      {
+        message: "Account created! Please check your email for verification code.",
+        userId: user._id,
+        email: user.email,
+      },
       { status: 201 }
     );
   } catch (error) {
