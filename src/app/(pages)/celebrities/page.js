@@ -1,26 +1,19 @@
-"use client";
-import { useEffect } from "react";
+import { Suspense } from "react";
+import CelebritiesClient from "@/components/celebrity/CelebritiesClient";
 
-export default function Smartsupp() {
-  useEffect(() => {
-    window._smartsupp = window._smartsupp || {};
-    window._smartsupp.key = "c5ee138e95f56534aeeaa618558137f896714bee";
+export const metadata = {
+  title: "Browse Celebrities — StarReach",
+  description: "Browse our full roster of A-list celebrities available for booking.",
+};
 
-    window.smartsupp ||
-      (function (d) {
-        var s, c, o = (window.smartsupp = function () {
-          o._.push(arguments);
-        });
-        o._ = [];
-        s = d.getElementsByTagName("script")[0];
-        c = d.createElement("script");
-        c.type = "text/javascript";
-        c.charset = "utf-8";
-        c.async = true;
-        c.src = "https://www.smartsuppchat.com/loader.js?";
-        s.parentNode.insertBefore(c, s);
-      })(document);
-  }, []);
-
-  return null;
+export default function CelebritiesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <p className="text-gray-400">Loading...</p>
+      </div>
+    }>
+      <CelebritiesClient />
+    </Suspense>
+  );
 }
