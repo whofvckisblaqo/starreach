@@ -8,60 +8,35 @@ export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
         isAdmin: { label: "isAdmin", type: "text" },
       },
-
       async authorize(credentials) {
         await connectDB();
 
         let user;
 
-        // =========================
-        // ADMIN LOGIN
-        // =========================
+        // Admin login
         if (credentials.isAdmin === "true") {
           user = await User.findOne({ role: "admin" });
-
-          if (!user) {
-            throw new Error("Admin account not found");
-          }
+          if (!user) throw new Error("Admin account not found");
         } else {
-          // =========================
-          // NORMAL USER LOGIN
-          // =========================
-          user = await User.findOne({
-            email: credentials.email,
-          });
+          user = await User.findOne({ email: credentials.email });
+          if (!user) throw new Error("No account found with this email");
 
-          if (!user) {
-            throw new Error("No account found with this email");
-          }
-
-          // =========================
-          // EMAIL VERIFICATION CHECK
-          // =========================
-          if (!user.isVerified) {
-            throw new Error(
-              "Please verify your email before logging in"
-            );
-          }
+          // Email verification disabled until domain is purchased
+          // if (!user.isVerified) {
+          //   throw new Error("Please verify your email before logging in");
+          // }
         }
 
-        // =========================
-        // PASSWORD CHECK
-        // =========================
         const isValid = await bcrypt.compare(
           credentials.password,
           user.password
         );
-
-        if (!isValid) {
-          throw new Error("Incorrect password");
-        }
+        if (!isValid) throw new Error("Incorrect password");
 
         return {
           id: user._id.toString(),
@@ -72,39 +47,31 @@ export const authOptions = {
       },
     }),
   ],
-
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
       }
-
       return token;
     },
-
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id;
         session.user.role = token.role;
       }
-
       return session;
     },
   },
-
   pages: {
     signIn: "/login",
     error: "/login",
   },
-
   session: {
     strategy: "jwt",
   },
-
   secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };
