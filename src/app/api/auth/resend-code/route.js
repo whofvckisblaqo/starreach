@@ -34,8 +34,8 @@ export async function POST(req) {
     });
 
     await resend.emails.send({
-      from: "StarReach <onboarding@resend.dev>",
-      to: "starreach02@gmail.com",
+      from: "StarReach <support@starreachapp.com>",
+      to: email,
       subject: "New Verification Code — StarReach",
       html: `
         <div style="max-width:600px;margin:40px auto;background:#fff;border-radius:16px;padding:32px;border:1px solid #e5e7eb;text-align:center;font-family:sans-serif;">
@@ -48,6 +48,9 @@ export async function POST(req) {
             </p>
           </div>
           <p style="color:#9ca3af;font-size:12px;">This code expires in 10 minutes.</p>
+          <p style="color:#9ca3af;font-size:12px;margin-top:16px;">
+            <a href="https://starreachapp.com" style="color:#111827;">starreachapp.com</a>
+          </p>
         </div>
       `,
     });

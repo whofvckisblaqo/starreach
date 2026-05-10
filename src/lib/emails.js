@@ -1,8 +1,7 @@
 import resend from "@/lib/resend";
 
-const FROM_EMAIL = "StarReach <onboarding@resend.dev>";
-const ADMIN_EMAIL = "starreach02@gmail.com";
-
+const FROM_EMAIL = "StarReach <support@starreachapp.com>";
+const ADMIN_EMAIL = "support@starreachapp.com";
 // ── Email to user after booking ──
 export async function sendBookingConfirmationEmail({
   userName,

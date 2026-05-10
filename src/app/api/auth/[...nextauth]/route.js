@@ -26,10 +26,10 @@ export const authOptions = {
           user = await User.findOne({ email: credentials.email });
           if (!user) throw new Error("No account found with this email");
 
-          // Email verification disabled until domain is purchased
-          // if (!user.isVerified) {
-          //   throw new Error("Please verify your email before logging in");
-          // }
+        
+           if (!user.isVerified) {
+            throw new Error("Please verify your email before logging in");
+          }
         }
 
         const isValid = await bcrypt.compare(
