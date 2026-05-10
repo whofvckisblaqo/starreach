@@ -18,16 +18,21 @@ export const authOptions = {
 
         let user;
 
-        // Admin login
+        // Admin login — bypasses verification
         if (credentials.isAdmin === "true") {
           user = await User.findOne({ role: "admin" });
           if (!user) throw new Error("Admin account not found");
+
+          // Auto verify admin if not verified
+          if (!user.isVerified) {
+            await User.findByIdAndUpdate(user._id, { isVerified: true });
+          }
         } else {
           user = await User.findOne({ email: credentials.email });
           if (!user) throw new Error("No account found with this email");
 
-        
-           if (!user.isVerified) {
+          // Check email verification for regular users
+          if (!user.isVerified) {
             throw new Error("Please verify your email before logging in");
           }
         }
