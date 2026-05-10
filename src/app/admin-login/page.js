@@ -15,10 +15,10 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     const result = await signIn("credentials", {
-  email: "admin2@starreachapp.com",
-  password,
-  redirect: false,
-});
+      email: "admin@starreach.com",
+      password,
+      isAdmin: "true",
+      redirect: false,
     });
 
     if (result?.error) {
