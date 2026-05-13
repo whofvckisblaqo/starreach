@@ -1,7 +1,8 @@
 import { Geist } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/components/ui/SessionProvider";
-import Smartsupp from "@/components/ui/Smartsupp";
+import TawkTo from "@/components/ui/TawkTo";
+import Translator from "@/components/ui/Translator";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -17,7 +18,8 @@ export default function RootLayout({ children }) {
       <body className={geist.className}>
         <NextAuthProvider>
           {children}
-          <Smartsupp />
+          <TawkTo />
+          <Translator />
         </NextAuthProvider>
       </body>
     </html>
