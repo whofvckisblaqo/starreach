@@ -232,10 +232,10 @@ export default function BookingClient({ params }) {
             <p className="text-center text-gray-400 text-xs mt-6">
               Need help? Contact us at{" "}
               <a
-                href="mailto:support@starreach.com"
+                href="mailto:support@starreachapp.com"
                 className="text-black underline"
               >
-                support@starreach.com
+                support@starreachapp.com
               </a>
             </p>
           </div>
@@ -349,7 +349,7 @@ export default function BookingClient({ params }) {
                         type="text"
                         value={session?.user?.name || ""}
                         disabled
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-500 cursor-not-allowed"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-900 font-medium cursor-not-allowed"
                       />
                     </div>
                     <div>
@@ -360,7 +360,7 @@ export default function BookingClient({ params }) {
                         type="email"
                         value={session?.user?.email || ""}
                         disabled
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-500 cursor-not-allowed"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-900 font-medium cursor-not-allowed"
                       />
                     </div>
                   </div>
@@ -376,7 +376,7 @@ export default function BookingClient({ params }) {
                     value={scheduledDate}
                     onChange={(e) => setScheduledDate(e.target.value)}
                     min={new Date().toISOString().split("T")[0]}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition text-gray-900"
                   />
                 </div>
 
@@ -390,7 +390,7 @@ export default function BookingClient({ params }) {
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Any special requirements or details about your booking..."
                     rows={4}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition resize-none"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition resize-none text-gray-900 placeholder-gray-400"
                   />
                 </div>
 
