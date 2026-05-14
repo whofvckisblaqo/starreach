@@ -10,6 +10,11 @@ export const metadata = {
   title: "StarReach — Where Fans Meet Fame",
   description:
     "The premier celebrity booking platform. Book VIP experiences, meet & greets, event appearances and more.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {
